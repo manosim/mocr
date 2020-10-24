@@ -1,0 +1,25 @@
+{
+  "name": "mocr",
+  "version": "0.0.1",
+  "description": "A mock http server used in tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manosim/mocr.git"
+  },
+  "keywords": [
+    "mock",
+    "http",
+    "server",
+    "tests"
+  ],
+  "author": "Emmanouil Konstantinidis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manosim/mocr/issues"
+  },
+  "homepage": "https://github.com/manosim/mocr#readme"
+}
