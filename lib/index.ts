@@ -1,3 +1,3 @@
-import { Config } from "./types";
+import { Config } from './types';
 
-export const hello = (config?: Config): string => 'world'
+export const hello = (config?: Config): string => 'world';
