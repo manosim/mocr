@@ -1,6 +1,10 @@
 name: Run Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   run-unit-tests:
@@ -21,13 +25,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: Install Dependencies
         run: yarn install
 
       - name: Run Prettier (Check)
         run: yarn prettier:check
+
+      - name: Run Typecheck
+        run: yarn tsc --noEmit
 
       - name: Run Jest
         run: yarn test --coverage

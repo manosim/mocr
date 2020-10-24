@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "yarn build",
     "prettier:check": "prettier --check 'lib/**/*.ts'",
     "prettier:apply": "prettier --write 'lib/**/*.ts'",
     "build": "tsc",
