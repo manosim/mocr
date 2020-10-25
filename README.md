@@ -21,10 +21,11 @@ npm install --save-dev mocr
 
 How to pass config?
 
-| Config Name | Default Value | Description                               |
-| ----------- | ------------- | ----------------------------------------- |
-| debug       | false         | When set to true, logging will be enabled |
-| port        | 9091          | The port that the server will be running. |
+| Name       | Default   | Description                                        |
+| ---------- | --------- | -------------------------------------------------- |
+| debug      | false     | When set to true, logging will be enabled.         |
+| port       | 9091      | The port that the server will be running.          |
+| requestSpy | undeinfed | Can be a spy or a call. See [usage](#usage) below. |
 
 ## Usage
 
@@ -32,19 +33,24 @@ How to pass config?
 import mocr from 'mocr';
 
 describe('my tests', () => {
+  const requestSpy = jest.fn();
+
   const mockServer = mocr({
     /* Configuration */
   });
 
   beforeAll(async () => {
-    await mockServer.start();
+    // Start the server
+    await mockServer.start(requestSpy);
   });
 
   beforeEach(async () => {
     // Reset the request spy
+    requestSpy.mockReset();
   });
 
   afterAll(async () => {
+    // Stop the server
     await mockServer.stop();
   });
 

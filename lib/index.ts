@@ -1,4 +1,4 @@
-import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
+import { IncomingMessage, Server } from 'http';
 import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
@@ -19,8 +19,10 @@ export const mocr = (initialConfig?: Config) => {
   let server: Server | undefined;
   let logger = new Logger(config.debug);
 
-  const start = async (): Promise<void> => {
-    server = await startServer({ config, logger });
+  const start = async (
+    requestSpy?: (req: IncomingMessage) => void
+  ): Promise<void> => {
+    server = await startServer({ config, logger, requestSpy });
   };
 
   const stop = async () => {

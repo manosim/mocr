@@ -1,4 +1,4 @@
-import { Server } from 'http';
+import { IncomingMessage } from 'http';
 import { Logger } from './logger';
 
 export type Config = {
@@ -9,4 +9,5 @@ export type Config = {
 export type StartOptions = {
   config: Config;
   logger: Logger;
+  requestSpy?: (req: IncomingMessage) => void;
 };

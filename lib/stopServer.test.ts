@@ -1,7 +1,4 @@
-import fetch from 'node-fetch';
-
 import { Logger } from './logger';
-import { mocr } from '.';
 import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
