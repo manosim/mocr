@@ -8,6 +8,8 @@ export const startServer = async ({
   return new Promise((resolve) => {
     const server: Server = createServer(
       (req: IncomingMessage, res: ServerResponse) => {
+        logger.info(`➡️ Received request (${req.method})`);
+
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/plain');
         res.end('Hello World');

@@ -12,8 +12,7 @@ export const stopServer = async (
         resolve();
       });
     } else {
-      logger.warn('✋ Mock server is not running');
-      reject();
+      reject('✋ Mock server is not running');
     }
   });
 };
