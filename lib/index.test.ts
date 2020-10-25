@@ -1,14 +1,15 @@
 import fetch from 'node-fetch';
 
-import { startServer, stopServer } from '.';
+import { mocr } from '.';
 
 test('starts an http server', async () => {
-  await startServer();
+  const mockServer = mocr({ debug: false });
+  await mockServer.start();
 
-  const response = await fetch('http://localhost:9091', {});
+  const response = await fetch('http://localhost:9091');
   const body = await response.text();
 
-  await stopServer();
+  await mockServer.stop();
 
   expect(body).toBe('Hello World');
 });

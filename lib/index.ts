@@ -1,43 +1,36 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
+import { startServer } from './startServer';
+import { stopServer } from './stopServer';
 
+import { Logger } from './logger';
 import { Config } from './types';
 
 const defaultConfig: Config = {
+  debug: false,
   port: 9091,
 };
 
-let server: Server | undefined;
-
-export const startServer = async (initialConfig?: Config): Promise<void> => {
+export const mocr = (initialConfig?: Config) => {
   const config = {
     ...defaultConfig,
     ...initialConfig,
   };
 
-  return new Promise((resolve) => {
-    server = createServer((req: IncomingMessage, res: ServerResponse) => {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/plain');
-      res.end('Hello World');
-    });
+  let server: Server | undefined;
+  let logger = new Logger(config.debug);
 
-    server.listen(config.port, () => {
-      console.log(`🚀 Server running at http://localhost:${config.port}/.`);
-      resolve();
-    });
-  });
+  const start = async (): Promise<void> => {
+    server = await startServer({ config, logger });
+  };
+
+  const stop = async () => {
+    await stopServer(server, logger);
+  };
+
+  return {
+    start,
+    stop,
+  };
 };
 
-export const stopServer = async () => {
-  return new Promise((resolve, reject) => {
-    if (server) {
-      server.close(() => {
-        console.log('✋ Mock server has stopped');
-        server = undefined;
-        resolve();
-      });
-    } else {
-      reject('✋ Mock server is not running');
-    }
-  });
-};
+export default mocr;
