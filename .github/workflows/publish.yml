@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-      GIT_NAME: ${{ secrets.GIT_NAME }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -20,11 +18,6 @@ jobs:
 
       - name: Authenticate with Registry
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
-      - name: Set Git config
-        run: |
-          git config --global user.name $GIT_NAME
-          git config --global user.email $GIT_EMAIL
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
