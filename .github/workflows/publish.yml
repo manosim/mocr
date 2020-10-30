@@ -38,4 +38,4 @@ jobs:
         run: yarn build
 
       - name: Run Release
-        run: npm run release -- --ci
+        run: npm run release minor -- --ci
