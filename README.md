@@ -5,6 +5,7 @@ A mock http server used in tests
 ## Features
 
 - Easy to use, mock http server
+- Spy on the requests received by the server
 - Designed to work with end-to-end & unit tests
 - Strongly typed, types included
 - Zero dependencies
@@ -19,7 +20,7 @@ npm install --save-dev mocr
 
 ## Configuration
 
-How to pass the config?
+All config options mentioned below are **_optional_**.
 
 | Name       | Default   | Description                                                                                                  |
 | ---------- | --------- | ------------------------------------------------------------------------------------------------------------ |
