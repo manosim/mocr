@@ -5,8 +5,8 @@ A mock http server used in tests
 ## Features
 
 - Easy to use, mock http server
-- Designed to work with unit tests
-- Strongly typed. Types included
+- Designed to work with end-to-end & unit tests
+- Strongly typed, types included
 - Zero dependencies
 
 ## Installation
@@ -19,13 +19,13 @@ npm install --save-dev mocr
 
 ## Configuration
 
-How to pass config?
+How to pass the config?
 
-| Name       | Default   | Description                                        |
-| ---------- | --------- | -------------------------------------------------- |
-| debug      | false     | When set to true, logging will be enabled.         |
-| port       | 9091      | The port that the server will be running.          |
-| requestSpy | undeinfed | Can be a spy or a call. See [usage](#usage) below. |
+| Name       | Default   | Description                                                                                                  |
+| ---------- | --------- | ------------------------------------------------------------------------------------------------------------ |
+| debug      | false     | When set to true, logging will be enabled.                                                                   |
+| port       | 9091      | The port that the server will be running.                                                                    |
+| requestSpy | undefined | Can be a spy or a call. See [usage](#usage) below. If defined, will be called with `(request, requestBody)`. |
 
 ## Usage
 
@@ -56,8 +56,15 @@ describe('my tests', () => {
 
   it('should make a call to the backend when pressing the button', () => {
     const requestSpy = jest.fn();
+
     // Press the button
-    expect(requestSpy).toHaveBeenCalledWith(/* Expected Data */);
+
+    const request = requestSpy.mock.calls[0][0];
+    const requestBody = requestSpy.mock.calls[0][1];
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(request.method).toBe(/* Expected Method, ie. POST, PUT */);
+    expect(requestBody).toHaveBeenCalledWith(/* Expected Request Body */);
   });
 });
 ```
