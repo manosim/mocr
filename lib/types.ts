@@ -9,5 +9,5 @@ export type Config = {
 export type StartOptions = {
   config: Config;
   logger: Logger;
-  requestSpy?: (req: IncomingMessage) => void;
+  requestSpy?: (req: IncomingMessage, body?: string) => void;
 };

@@ -10,13 +10,22 @@ export const startServer = async ({
     const requestListener = (req: IncomingMessage, res: ServerResponse) => {
       logger.info(`➡️ Received request (${req.method})`);
 
-      if (requestSpy) {
-        requestSpy(req);
-      }
+      let body: string;
 
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/plain');
-      res.end('Hello World');
+      req.on('data', (chunk) => {
+        body = `${body || ''}${chunk}`;
+      });
+
+      req.on('end', () => {
+        if (requestSpy) {
+          const isReqJson = req.headers['content-type'] === 'application/json';
+          requestSpy(req, isReqJson && body ? JSON.parse(body) : body);
+        }
+
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/plain');
+        res.end('Hello World');
+      });
     };
 
     const server: Server = createServer(requestListener);
