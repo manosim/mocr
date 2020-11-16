@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 import { Logger } from './logger';
-import { mocr } from '.';
+import { mocr, createRequestSpy } from '.';
 
 describe('index.ts', () => {
   const DEFAULT_SERVER_URL = 'http://localhost:9091';
@@ -64,17 +64,43 @@ describe('index.ts', () => {
   });
 
   it('uses a spy for intercepting requests', async () => {
-    const requestSpy = jest.fn();
+    const requestSpy = createRequestSpy();
+
+    jest.spyOn(requestSpy, 'recordRequest');
+
     const mockServer = mocr();
 
     await mockServer.start(requestSpy);
 
     await fetch(`${DEFAULT_SERVER_URL}/profile`);
 
-    const request = requestSpy.mock.calls[0][0];
+    const { request } = requestSpy.calls[0];
 
     expect(request.url).toBe('/profile');
-    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(requestSpy.recordRequest).toHaveBeenCalledTimes(1);
+
+    await mockServer.stop();
+  });
+
+  it('uses a spy for intercepting requests with body(JSON)', async () => {
+    const requestSpy = createRequestSpy();
+
+    jest.spyOn(requestSpy, 'recordRequest');
+
+    const mockServer = mocr();
+
+    await mockServer.start(requestSpy);
+
+    await fetch(`${DEFAULT_SERVER_URL}/profile`, {
+      method: 'POST',
+      body: 'Hello!',
+    });
+
+    const { request, body } = requestSpy.calls[0];
+
+    expect(request.url).toBe('/profile');
+    expect(requestSpy.recordRequest).toHaveBeenCalledTimes(1);
+    expect(body).toBe('Hello!');
 
     await mockServer.stop();
   });

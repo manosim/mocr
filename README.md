@@ -31,10 +31,10 @@ All config options mentioned below are **_optional_**.
 ## Usage
 
 ```js
-import mocr from 'mocr';
+import mocr, { createRequestSpy } from 'mocr';
 
 describe('my tests', () => {
-  const requestSpy = jest.fn();
+  const requestSpy = createRequestSpy();
 
   const mockServer = mocr({
     /* Configuration */
@@ -47,7 +47,7 @@ describe('my tests', () => {
 
   beforeEach(async () => {
     // Reset the request spy
-    requestSpy.mockReset();
+    requestSpy.reset();
   });
 
   afterAll(async () => {
@@ -56,25 +56,32 @@ describe('my tests', () => {
   });
 
   it('should make a call to the backend when pressing the button', () => {
-    const requestSpy = jest.fn();
-
     // Press the button
 
-    const request = requestSpy.mock.calls[0][0];
-    const requestBody = requestSpy.mock.calls[0][1];
+    const { request, body } = requestSpy.mock.calls[0];
 
     expect(requestSpy).toHaveBeenCalledTimes(1);
     expect(request.method).toBe(/* Expected Method, ie. POST, PUT */);
-    expect(requestBody).toHaveBeenCalledWith(/* Expected Request Body */);
+    expect(body).toHaveBeenCalledWith(/* Expected Request Body */);
   });
 });
 ```
+
+## Methods
+
+### mocr
+
+Used to create an instance of _mocr_. Also accepts _optional_ configuration.
+
+### createRequestSpy
+
+Creates a fresh request spy. This will get record all _incoming_ requests along with their body/data(if any). To be used for validating requests/content leaveing your application.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 [github-ci-image]: https://github.com/manosim/mocr/workflows/Run%20Tests/badge.svg
 [github-ci-url]: https://github.com/manosim/mocr/actions
 [npm-image]: https://badge.fury.io/js/mocr.svg
 [npm-url]: https://www.npmjs.com/package/mocr
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
