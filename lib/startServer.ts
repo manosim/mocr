@@ -19,7 +19,10 @@ export const startServer = async ({
       req.on('end', () => {
         if (requestSpy) {
           const isReqJson = req.headers['content-type'] === 'application/json';
-          requestSpy(req, isReqJson && body ? JSON.parse(body) : body);
+          requestSpy.recordRequest(
+            req,
+            isReqJson && body ? JSON.parse(body) : body
+          );
         }
 
         res.statusCode = 200;

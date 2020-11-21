@@ -9,5 +9,16 @@ export type Config = {
 export type StartOptions = {
   config: Config;
   logger: Logger;
-  requestSpy?: (req: IncomingMessage, body?: string) => void;
+  requestSpy?: RequestSpy;
+};
+
+export type RequestRecord = {
+  request: IncomingMessage;
+  body?: string | {};
+};
+
+export type RequestSpy = {
+  calls: RequestRecord[];
+  reset: () => void;
+  recordRequest: (request: IncomingMessage, body?: string | {}) => void;
 };

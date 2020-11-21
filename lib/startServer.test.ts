@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 
 import { Logger } from './logger';
+import { createRequestSpy } from './requestSpy';
 import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
@@ -26,7 +27,7 @@ describe('startServer.ts', () => {
   });
 
   it('validates the body(JSON) of a POST request using the listener', async () => {
-    const requestSpy = jest.fn();
+    const requestSpy = createRequestSpy();
 
     const mockServer = await startServer({
       config: {
@@ -47,13 +48,13 @@ describe('startServer.ts', () => {
 
     await stopServer(mockServer, mockLogger);
 
-    const requestBody = requestSpy.mock.calls[0][1];
+    const requestBody = requestSpy.calls[0].body;
 
     expect(requestBody).toEqual({ hello: 'world' });
   });
 
   it('validates a GET request using the listener', async () => {
-    const requestSpy = jest.fn();
+    const requestSpy = createRequestSpy();
 
     const mockServer = await startServer({
       config: {
@@ -68,8 +69,8 @@ describe('startServer.ts', () => {
 
     await stopServer(mockServer, mockLogger);
 
-    const request = requestSpy.mock.calls[0][0];
-    const requestBody = requestSpy.mock.calls[0][1];
+    const request = requestSpy.calls[0].request;
+    const requestBody = requestSpy.calls[0].body;
 
     expect(request.method).toBe('GET');
     expect(requestBody).not.toBeDefined();
