@@ -83,7 +83,7 @@ Creates a fresh request spy. This records/tracks all _incoming_ requests to the 
 
 | Name  | Description                                                           |
 | ----- | --------------------------------------------------------------------- |
-| calls | An array of all the calls. `[ {request: IncomingMessage. body: string | {} } ]` |
+| calls | An array of all the calls. `[ {request: IncomingMessage. body: string {} } ]` |
 | reset | Empties the `calls` array.                                            |
 
 ## License
