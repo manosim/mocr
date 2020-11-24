@@ -16,6 +16,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
     });
 
     const response = await fetch(DEFAULT_SERVER_URL);
@@ -35,6 +36,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
       requestSpy,
     });
 
@@ -62,6 +64,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
       requestSpy,
     });
 

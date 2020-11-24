@@ -3,7 +3,7 @@ import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
 import { Logger } from './logger';
-import { Config, RequestSpy } from './types';
+import { Config, MockResponse, RequestSpy } from './types';
 
 const defaultConfig: Config = {
   debug: false,
@@ -18,12 +18,15 @@ export const mocr = (initialConfig?: Config) => {
 
   let server: Server | undefined;
   let logger = new Logger(config.debug);
-  let mockResponses = [];
+  const mockResponses: MockResponse[] = [];
 
   const start = async (requestSpy?: RequestSpy): Promise<void> => {
-    const serverResponse = await startServer({ config, logger, requestSpy });
-    server = serverResponse.server;
-    mockResponses = serverResponse.mockResponses as any;
+    server = await startServer({
+      config,
+      logger,
+      mockResponses,
+      requestSpy,
+    });
   };
 
   const stop = async () => {

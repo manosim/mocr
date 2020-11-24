@@ -105,7 +105,7 @@ describe('index.ts', () => {
     await mockServer.stop();
   });
 
-  fit('mocks the next response', async () => {
+  it('mocks the next response', async () => {
     const mockServer = mocr();
 
     await mockServer.start();
@@ -125,7 +125,7 @@ describe('index.ts', () => {
     await mockServer.stop();
   });
 
-  fit('mocks the next couple of responses', async () => {
+  it('mocks the next couple of responses', async () => {
     const mockServer = mocr();
 
     await mockServer.start();

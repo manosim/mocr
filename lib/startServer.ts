@@ -1,22 +1,12 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
-import { StartOptions } from './types';
-
-type JSON = {
-  [x: string]: any;
-};
-
-interface StartServerResponse {
-  server: Server;
-  mockResponses: JSON[];
-}
+import { MockResponse, StartOptions } from './types';
 
 export const startServer = async ({
   config,
   logger,
+  mockResponses,
   requestSpy,
-}: StartOptions): Promise<StartServerResponse> => {
-  const mockResponses: JSON[] = [];
-
+}: StartOptions): Promise<Server> => {
   return new Promise((resolve) => {
     const requestListener = (req: IncomingMessage, res: ServerResponse) => {
       logger.info(`➡️ Received request (${req.method})`);
@@ -39,8 +29,13 @@ export const startServer = async ({
         res.statusCode = 200;
 
         if (mockResponses.length) {
+          logger.info(`➡️ Found a mock response. Will return it.`);
           const mockResponse = mockResponses.splice(0, 1)[0];
-          res.setHeader('Content-Type', 'application/json');
+          const contentType =
+            typeof mockResponse === 'string'
+              ? 'text/plain'
+              : 'application/json';
+          res.setHeader('Content-Type', contentType);
           res.end(JSON.stringify(mockResponse));
         } else {
           res.setHeader('Content-Type', 'text/plain');
@@ -53,7 +48,7 @@ export const startServer = async ({
 
     server.listen(config.port, () => {
       logger.info(`🚀 Server running at http://localhost:${config.port}/.`);
-      resolve({ server, mockResponses });
+      resolve(server);
     });
   });
 };
