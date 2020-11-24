@@ -104,4 +104,52 @@ describe('index.ts', () => {
 
     await mockServer.stop();
   });
+
+  fit('mocks the next response', async () => {
+    const mockServer = mocr();
+
+    await mockServer.start();
+
+    mockServer.mockNextResponse({
+      username: 'johndoe',
+    });
+
+    const res = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resJson = await res.json();
+    expect(resJson.username).toBe('johndoe');
+
+    const resTwo = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resTwoBody = await resTwo.text();
+    expect(resTwoBody).toBe('Hello World');
+
+    await mockServer.stop();
+  });
+
+  fit('mocks the next couple of responses', async () => {
+    const mockServer = mocr();
+
+    await mockServer.start();
+
+    mockServer.mockNextResponse({
+      username: 'johndoe',
+    });
+
+    mockServer.mockNextResponse({
+      username: 'martymcfly',
+    });
+
+    const res = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resJson = await res.json();
+    expect(resJson.username).toBe('johndoe');
+
+    const resTwo = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resTwoJson = await resTwo.json();
+    expect(resTwoJson.username).toBe('martymcfly');
+
+    const resThree = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resThreeBody = await resThree.text();
+    expect(resThreeBody).toBe('Hello World');
+
+    await mockServer.stop();
+  });
 });

@@ -1,4 +1,4 @@
-import { Server } from 'http';
+import { Server, ServerResponse } from 'http';
 import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
@@ -18,18 +18,26 @@ export const mocr = (initialConfig?: Config) => {
 
   let server: Server | undefined;
   let logger = new Logger(config.debug);
+  let mockResponses = [];
 
   const start = async (requestSpy?: RequestSpy): Promise<void> => {
-    server = await startServer({ config, logger, requestSpy });
+    const serverResponse = await startServer({ config, logger, requestSpy });
+    server = serverResponse.server;
+    mockResponses = serverResponse.mockResponses as any;
   };
 
   const stop = async () => {
     await stopServer(server, logger);
   };
 
+  const mockNextResponse = (data: any) => {
+    mockResponses.push(data);
+  };
+
   return {
     start,
     stop,
+    mockNextResponse,
   };
 };
 

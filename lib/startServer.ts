@@ -1,11 +1,22 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
 import { StartOptions } from './types';
 
+type JSON = {
+  [x: string]: any;
+};
+
+interface StartServerResponse {
+  server: Server;
+  mockResponses: JSON[];
+}
+
 export const startServer = async ({
   config,
   logger,
   requestSpy,
-}: StartOptions): Promise<Server> => {
+}: StartOptions): Promise<StartServerResponse> => {
+  const mockResponses: JSON[] = [];
+
   return new Promise((resolve) => {
     const requestListener = (req: IncomingMessage, res: ServerResponse) => {
       logger.info(`➡️ Received request (${req.method})`);
@@ -26,8 +37,15 @@ export const startServer = async ({
         }
 
         res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end('Hello World');
+
+        if (mockResponses.length) {
+          const mockResponse = mockResponses.splice(0, 1)[0];
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(mockResponse));
+        } else {
+          res.setHeader('Content-Type', 'text/plain');
+          res.end('Hello World');
+        }
       });
     };
 
@@ -35,7 +53,7 @@ export const startServer = async ({
 
     server.listen(config.port, () => {
       logger.info(`🚀 Server running at http://localhost:${config.port}/.`);
-      resolve(server);
+      resolve({ server, mockResponses });
     });
   });
 };
