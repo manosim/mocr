@@ -152,4 +152,33 @@ describe('index.ts', () => {
 
     await mockServer.stop();
   });
+
+  it('mocks the next couple of responses at once', async () => {
+    const mockServer = mocr();
+
+    await mockServer.start();
+
+    mockServer.mockNextResponses([
+      {
+        username: 'johndoe',
+      },
+      {
+        username: 'martymcfly',
+      },
+    ]);
+
+    const res = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resJson = await res.json();
+    expect(resJson.username).toBe('johndoe');
+
+    const resTwo = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resTwoJson = await resTwo.json();
+    expect(resTwoJson.username).toBe('martymcfly');
+
+    const resThree = await fetch(`${DEFAULT_SERVER_URL}/profile`);
+    const resThreeBody = await resThree.text();
+    expect(resThreeBody).toBe('Hello World');
+
+    await mockServer.stop();
+  });
 });

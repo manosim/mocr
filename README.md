@@ -79,12 +79,41 @@ Used to create an instance of _mocr_ - it accepts _optional_ configuration. You 
 
 ### createRequestSpy
 
-Creates a fresh request spy. This records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy.
+```js
+import { createRequestSpy } from 'mocr';
 
-| Name  | Description                                                           |
-| ----- | --------------------------------------------------------------------- |
+const requestSpy = createRequestSpy();
+const mockServer = mocr(/* Optional Config */);
+
+await mockServer.start(requestSpy);
+```
+
+Creates a fresh request spy. This records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy. See [example](#usage) above.
+
+| Name  | Description                                                                   |
+| ----- | ----------------------------------------------------------------------------- |
 | calls | An array of all the calls. `[ {request: IncomingMessage. body: string {} } ]` |
-| reset | Empties the `calls` array.                                            |
+| reset | Empties the `calls` array.                                                    |
+
+### mockNextResponse
+
+```js
+const { mocr, mockNextResponse } = mocr(/* Optional Config */);
+
+mockNextResponse({ foo: 'bar' });
+```
+
+Used to return a mock/stubbed response from the server. Will only use that response once and will then fallback to the default `Hello World` server response. For mocking multiple requests, see [mockNextResponses](#mockNextResponses) below.
+
+### mockNextResponses
+
+```js
+const { mocr, mockNextResponses } = mocr(/* Optional Config */);
+
+mockNextResponses([{ id: '123' }, { id: '456' }]);
+```
+
+Similar to `mockNextResponse` but expects and array of data. The data will be return for each response in the order they appear in the array.
 
 ## License
 

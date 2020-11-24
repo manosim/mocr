@@ -33,14 +33,21 @@ export const mocr = (initialConfig?: Config) => {
     await stopServer(server, logger);
   };
 
-  const mockNextResponse = (data: any) => {
-    mockResponses.push(data);
+  const mockNextResponse = (response: MockResponse) => {
+    logger.info(`➡️ Received a singled mock response.`);
+    mockResponses.push(response);
+  };
+
+  const mockNextResponses = (responses: MockResponse[]) => {
+    logger.info(`➡️ Received ${responses.length} mock responses.`);
+    mockResponses.push(...responses);
   };
 
   return {
     start,
     stop,
     mockNextResponse,
+    mockNextResponses,
   };
 };
 
