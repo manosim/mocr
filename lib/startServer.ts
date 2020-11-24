@@ -31,12 +31,14 @@ export const startServer = async ({
         if (mockResponses.length) {
           logger.info(`➡️ Found a mock response. Will return it.`);
           const mockResponse = mockResponses.splice(0, 1)[0];
-          const contentType =
-            typeof mockResponse === 'string'
-              ? 'text/plain'
-              : 'application/json';
+          const isResJson = typeof mockResponse !== 'string';
+          const contentType = isResJson ? 'application/json' : 'text/plain';
+          const responseData = isResJson
+            ? JSON.stringify(mockResponse)
+            : mockResponse;
+
           res.setHeader('Content-Type', contentType);
-          res.end(JSON.stringify(mockResponse));
+          res.end(responseData);
         } else {
           res.setHeader('Content-Type', 'text/plain');
           res.end('Hello World');
