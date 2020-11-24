@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
-import { MockResponse, StartOptions } from './types';
+import { StartOptions } from './types';
 
 export const startServer = async ({
   config,
