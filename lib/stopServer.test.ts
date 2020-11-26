@@ -6,7 +6,11 @@ describe('stopServer.ts', () => {
   const mockLogger = new Logger(false);
 
   it('stops an existing running http server', async () => {
-    const server = await startServer({ config: {}, logger: mockLogger });
+    const server = await startServer({
+      config: {},
+      logger: mockLogger,
+      mockResponses: [],
+    });
     const stop = async () => await stopServer(server, mockLogger as Logger);
     expect(stop).not.toThrowError();
   });

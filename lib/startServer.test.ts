@@ -16,6 +16,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
     });
 
     const response = await fetch(DEFAULT_SERVER_URL);
@@ -35,6 +36,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
       requestSpy,
     });
 
@@ -62,6 +64,7 @@ describe('startServer.ts', () => {
         port: 9091,
       },
       logger: mockLogger,
+      mockResponses: [],
       requestSpy,
     });
 
@@ -74,5 +77,41 @@ describe('startServer.ts', () => {
 
     expect(request.method).toBe('GET');
     expect(requestBody).not.toBeDefined();
+  });
+
+  it('returns a mocked response with plain text', async () => {
+    const mockServer = await startServer({
+      config: {
+        debug: true,
+        port: 9091,
+      },
+      logger: mockLogger,
+      mockResponses: [{ hello: 'world' }],
+    });
+
+    const response = await fetch(DEFAULT_SERVER_URL);
+    const responseBody = await response.json();
+
+    await stopServer(mockServer, mockLogger);
+
+    expect(responseBody).toEqual({ hello: 'world' });
+  });
+
+  it('returns a mocked response with plain text', async () => {
+    const mockServer = await startServer({
+      config: {
+        debug: true,
+        port: 9091,
+      },
+      logger: mockLogger,
+      mockResponses: ['This is a test'],
+    });
+
+    const response = await fetch(DEFAULT_SERVER_URL);
+    const responseBody = await response.text();
+
+    await stopServer(mockServer, mockLogger);
+
+    expect(responseBody).toBe('This is a test');
   });
 });
