@@ -34,7 +34,7 @@ export const mocr = (initialConfig?: Config) => {
   };
 
   const mockNextResponse = (response: MockResponse) => {
-    logger.info(`➡️ Received a singled mock response.`);
+    logger.info(`➡️ Received a single mock response.`);
     mockResponses.push(response);
   };
 

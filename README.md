@@ -103,7 +103,7 @@ const { mocr, mockNextResponse } = mocr(/* Optional Config */);
 mockNextResponse({ foo: 'bar' });
 ```
 
-Used to return a mock/stubbed response from the server. Will only use that response once and will then fallback to the default `Hello World` server response. For mocking multiple requests, see [mockNextResponses](#mockNextResponses) below.
+Used to return a mock/stubbed response from the server. Will only use that response once and will then fall back to the default `Hello World` server response. For mocking multiple requests, see [mockNextResponses](#mockNextResponses) below.
 
 ### mockNextResponses
 
@@ -113,7 +113,7 @@ const { mocr, mockNextResponses } = mocr(/* Optional Config */);
 mockNextResponses([{ id: '123' }, { id: '456' }]);
 ```
 
-Similar to `mockNextResponse` but expects and array of data. The data will be return for each response in the order they appear in the array.
+Similar to `mockNextResponse` but expects an array of data. The data will be return for each response in the order they appear in the array.
 
 ## License
 
