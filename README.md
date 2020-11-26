@@ -26,11 +26,10 @@ npm install --save-dev mocr
 
 All config options mentioned below are **_optional_**.
 
-| Name       | Default   | Description                                                                                                 |
-| ---------- | --------- | ----------------------------------------------------------------------------------------------------------- |
-| debug      | false     | When set to true, logging will be enabled.                                                                  |
-| port       | 9091      | The port that the server will be running.                                                                   |
-| requestSpy | undefined | This spy can track all the requests that reach the server. See [createRequestSpy](#createRequestSpy) below. |
+| Name  | Default | Description                                |
+| ----- | ------- | ------------------------------------------ |
+| debug | false   | When set to true, logging will be enabled. |
+| port  | 9091    | The port that the server will be running.  |
 
 ## Usage
 
@@ -38,20 +37,18 @@ All config options mentioned below are **_optional_**.
 import mocr, { createRequestSpy } from 'mocr';
 
 describe('my tests', () => {
-  const requestSpy = createRequestSpy();
-
   const mockServer = mocr({
     /* Configuration */
   });
 
   beforeAll(async () => {
     // Start the server
-    await mockServer.start(requestSpy);
+    await mockServer.start();
   });
 
   beforeEach(async () => {
     // Reset the request spy
-    requestSpy.reset();
+    mockServer.requestSpy.reset();
   });
 
   afterAll(async () => {
@@ -64,7 +61,7 @@ describe('my tests', () => {
 
     const { request, body } = requestSpy.calls[0];
 
-    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(mockServer.requestSpy).toHaveBeenCalledTimes(1);
     expect(request.method).toBe(/* Expected Method, ie. POST, PUT */);
     expect(body).toHaveBeenCalledWith(/* Expected Request Body */);
   });
@@ -77,43 +74,77 @@ describe('my tests', () => {
 
 Used to create an instance of _mocr_ - it accepts _optional_ configuration. You can have as many _mocr_ servers running in parallel as long as they run on a [different port](#configuration).
 
-### createRequestSpy
+### start
 
 ```js
-import { createRequestSpy } from 'mocr';
-
-const requestSpy = createRequestSpy();
 const mockServer = mocr(/* Optional Config */);
 
-await mockServer.start(requestSpy);
+await mockServer.start();
 ```
 
-Creates a fresh request spy. This records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy. See [example](#usage) above.
+Starts the http server.
+
+### stop
+
+```js
+const mockServer = mocr(/* Optional Config */);
+
+await mockServer.stop();
+```
+
+Stops the server of the `mocr` instance.
+
+### requestSpy
+
+```js
+const { start, stop, requestSpy } = mocr(/* Optional Config */);
+
+expect(requestSpy.calls).toHaveLength(1);
+```
+
+Holds a records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy. See [example](#usage) above.
 
 | Name  | Description                                                                   |
 | ----- | ----------------------------------------------------------------------------- |
 | calls | An array of all the calls. `[ {request: IncomingMessage. body: string {} } ]` |
 | reset | Empties the `calls` array.                                                    |
 
-### mockNextResponse
+### mockNextResponse({ data })
 
 ```js
-const { mocr, mockNextResponse } = mocr(/* Optional Config */);
+const { start, stop, mockNextResponse } = mocr(/* Optional Config */);
 
 mockNextResponse({ foo: 'bar' });
 ```
 
 Used to return a mock/stubbed response from the server. Will only use that response once and will then fall back to the default `Hello World` server response. For mocking multiple requests, see [mockNextResponses](#mockNextResponses) below.
 
-### mockNextResponses
+### mockNextResponses([ { data } ])
 
 ```js
-const { mocr, mockNextResponses } = mocr(/* Optional Config */);
+const { start, stop, mockNextResponses } = mocr(/* Optional Config */);
 
 mockNextResponses([{ id: '123' }, { id: '456' }]);
 ```
 
 Similar to `mockNextResponse` but expects an array of data. The data will be return for each response in the order they appear in the array.
+
+## Properties
+
+### requestSpy
+
+```js
+const { start, stop, requestSpy } = mocr(/* Optional Config */);
+
+expect(requestSpy.calls).toHaveLength(1);
+```
+
+Holds a records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy. See [example](#usage) above.
+
+| Name  | Description                                                                   |
+| ----- | ----------------------------------------------------------------------------- |
+| calls | An array of all the calls. `[ {request: IncomingMessage. body: string {} } ]` |
+| reset | Empties the `calls` array.                                                    |
 
 ## License
 

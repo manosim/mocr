@@ -1,9 +1,10 @@
-import { Server, ServerResponse } from 'http';
+import { Server } from 'http';
 import { startServer } from './startServer';
 import { stopServer } from './stopServer';
 
 import { Logger } from './logger';
 import { Config, MockResponse, RequestSpy } from './types';
+import { createRequestSpy } from './requestSpy';
 
 const defaultConfig: Config = {
   debug: false,
@@ -18,9 +19,11 @@ export const mocr = (initialConfig?: Config) => {
 
   let server: Server | undefined;
   let logger = new Logger(config.debug);
-  const mockResponses: MockResponse[] = [];
 
-  const start = async (requestSpy?: RequestSpy): Promise<void> => {
+  const mockResponses: MockResponse[] = [];
+  const requestSpy: RequestSpy = createRequestSpy();
+
+  const start = async (): Promise<void> => {
     server = await startServer({
       config,
       logger,
@@ -48,8 +51,8 @@ export const mocr = (initialConfig?: Config) => {
     stop,
     mockNextResponse,
     mockNextResponses,
+    requestSpy,
   };
 };
 
-export { createRequestSpy } from './requestSpy';
 export default mocr;
