@@ -1,3 +1,11 @@
+# [0.6.0](https://github.com/manosim/mocr/compare/v0.5.0...v0.6.0) (2020-11-27)
+
+
+### Features
+
+* Keep createRequestSpy internally and expose requestSpy ([#11](https://github.com/manosim/mocr/issues/11)) ([d8e97a2](https://github.com/manosim/mocr/commit/d8e97a208634d41acf909a3c64fe3a274badd3e9))
+* Mock next/upcoming responses ([#10](https://github.com/manosim/mocr/issues/10)) ([dae6581](https://github.com/manosim/mocr/commit/dae6581760ed7d023b4e3b34ca9baad6b76ca72d))
+
 # [0.5.0](https://github.com/manosim/mocr/compare/v0.4.0...v0.5.0) (2020-11-21)
 
 
