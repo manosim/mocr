@@ -72,7 +72,15 @@ describe('my tests', () => {
 
 ### mocr
 
-Used to create an instance of _mocr_ - it accepts _optional_ configuration. You can have as many _mocr_ servers running in parallel as long as they run on a [different port](#configuration).
+```js
+const mockServer = mocr(/* Optional Config */);
+
+await mockServer.start();
+// Run your test case
+await mockServer.stop();
+```
+
+Used to create an instance of _mocr_ - it accepts _optional_ configuration. You can have as many _mocr_ servers running in parallel as long as they run on a [different port](#configuration). See [example](#usage) for a complete example.
 
 ### start()
 
