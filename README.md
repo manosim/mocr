@@ -74,7 +74,7 @@ describe('my tests', () => {
 
 Used to create an instance of _mocr_ - it accepts _optional_ configuration. You can have as many _mocr_ servers running in parallel as long as they run on a [different port](#configuration).
 
-### start
+### start()
 
 ```js
 const mockServer = mocr(/* Optional Config */);
@@ -84,7 +84,7 @@ await mockServer.start();
 
 Starts the http server.
 
-### stop
+### stop()
 
 ```js
 const mockServer = mocr(/* Optional Config */);
@@ -93,21 +93,6 @@ await mockServer.stop();
 ```
 
 Stops the server of the `mocr` instance.
-
-### requestSpy
-
-```js
-const { start, stop, requestSpy } = mocr(/* Optional Config */);
-
-expect(requestSpy.calls).toHaveLength(1);
-```
-
-Holds a records/tracks all _incoming_ requests to the mock server along with their body/data(if any). To be used for validating requests/content leaving your application. Below you can find all available methods for a RequestSpy. See [example](#usage) above.
-
-| Name  | Description                                                                   |
-| ----- | ----------------------------------------------------------------------------- |
-| calls | An array of all the calls. `[ {request: IncomingMessage. body: string {} } ]` |
-| reset | Empties the `calls` array.                                                    |
 
 ### mockNextResponse({ data })
 
